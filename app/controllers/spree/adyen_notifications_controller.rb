@@ -8,7 +8,7 @@ module Spree
       if notification_exists?(params)
         accept
       else
-        notification = AdyenNotification.build(params)
+        notification = AdyenNotification.build(params['notificationItems'].first['NotificationRequestItem'])
         notification.save!
 
         # prevent alteration to associated payment while we're handling the action
