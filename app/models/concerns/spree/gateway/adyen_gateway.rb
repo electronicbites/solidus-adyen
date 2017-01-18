@@ -60,13 +60,13 @@ module Spree
     private
 
     def rest_client
-      @client ||= Adyen::Client.new(self)
+      @client ||= provider_class::Client.new('test', api_username, api_password)
     end
 
     def handle_response(response, original_reference = nil)
       ActiveMerchant::Billing::Response.new(
         response.success?,
-        response.message,
+        response['modificationResult'],
         response.attributes,
         authorization: original_reference || response.psp_reference
       )

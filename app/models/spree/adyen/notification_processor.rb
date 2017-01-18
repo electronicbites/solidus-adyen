@@ -32,20 +32,27 @@ module Spree
       # number of reasons why there may not be a matching payment such as test
       # notifications, reports etc, we just log them and then accept
       def process!
+        Rails.logger.debug "Spree::Adyen::process!"
         return notification if order.nil?
-
+        Rails.logger.debug "Spree::Adyen::step 1"
         order.with_lock do
+          Rails.logger.debug "Spree::Adyen::step 2: #{should_create_payment?}"
           if should_create_payment?
             self.payment = create_missing_payment
           end
 
+          Rails.logger.debug "Spree::Adyen::step 3"
+
           if !notification.success?
+            Rails.logger.debug "Spree::Adyen::step 10"
             handle_failure
 
           elsif notification.modification_event?
+            Rails.logger.debug "Spree::Adyen::step 11"
             handle_modification_event
 
           elsif notification.normal_event?
+            Rails.logger.debug "Spree::Adyen::step 12"
             handle_normal_event
 
           end
