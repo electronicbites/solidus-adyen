@@ -28,6 +28,10 @@ module Spree
       )
     end
 
+    def environment
+      Adyen.configuration.environment
+    end
+
     def provider_class
       ::Adyen::REST
     end
@@ -60,7 +64,7 @@ module Spree
     private
 
     def rest_client
-      @client ||= provider_class::Client.new('test', api_username, api_password)
+      @client ||= provider_class::Client.new(environment, api_username, api_password)
     end
 
     def handle_response(response, original_reference = nil)
