@@ -29,7 +29,7 @@ module Spree
     end
 
     def environment
-      Adyen.configuration.environment
+      ENV["ADYEN_ENVIRONMENT"] || 'test'
     end
 
     def provider_class
