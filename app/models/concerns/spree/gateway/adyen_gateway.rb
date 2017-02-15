@@ -37,6 +37,7 @@ module Spree
     end
 
     def capture(amount, psp_reference, currency:, **_opts)
+      Rails.logger.debug "Gateway::AdyenGateway.capture"
       params = modification_request(amount, currency, psp_reference)
 
       handle_response(rest_client.capture_payment(params), psp_reference)
@@ -68,6 +69,7 @@ module Spree
     end
 
     def handle_response(response, original_reference = nil)
+      Rails.logger.debug "Gateway::AdyenGateway.handle_response #{response}"
       ActiveMerchant::Billing::Response.new(
         response.success?,
         response['modificationResult'],

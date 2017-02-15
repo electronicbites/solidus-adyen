@@ -24,6 +24,7 @@ module Spree
       # auto_capture enabled. Since we authorize credit cards in the payment
       # step already, we just need to capture the payment here.
       def purchase!
+        Rails.logger.debug "Payment.purchase!"
         if adyen_cc_payment? || ratepay?
           capture!
         else
@@ -33,6 +34,7 @@ module Spree
 
       # capture! :: bool | error
       def capture!
+        Rails.logger.debug "Payment.capture!"
         if hpp_payment? || adyen_cc_payment? || ratepay?
           amount = money.money.cents
           process do
