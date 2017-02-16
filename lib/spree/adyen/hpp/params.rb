@@ -50,13 +50,15 @@ module Spree
         end
 
         def order_params
-          { currency_code: @order.currency,
+          order_params = { currency_code: @order.currency,
             merchant_reference: @order.number.to_s,
             country_code: @order.billing_address.country.iso,
             payment_amount: (@order.total * 100).to_int,
             shopper_locale: I18n.locale.to_s.gsub("-", "_"),
             shopper_email: @order.email,
           }
+          order_params.merge({recurring_contract: 'RECURRING',
+            shopper_reference: @order.user.id})
         end
 
         def payment_method_params
