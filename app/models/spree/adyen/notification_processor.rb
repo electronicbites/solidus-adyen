@@ -96,6 +96,7 @@ module Spree
 
       # normal event is defined as just AUTHORISATION
       def handle_normal_event
+        Rails.logger.debug "Spree::Adyen::handle_normal_event"
         # Payment may not have psp_reference. Add this from notification if it
         # doesn't have one.
         unless self.payment.response_code
@@ -104,6 +105,8 @@ module Spree
         end
 
         if notification.auto_captured?
+
+          Rails.logger.debug "Spree::Adyen::notification.auto_captured?: true"
           complete_payment!
 
         # elsif payment.hpp_payment?
@@ -114,6 +117,7 @@ module Spree
       end
 
       def complete_payment!
+        Rails.logger.debug "Spree::Adyen::complete_payment!"
         money = ::Money.new(notification.value, notification.currency)
 
         # this is copied from Spree::Payment::Processing#capture
